@@ -1,0 +1,46 @@
+﻿<div id="app">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">單價</th>
+                <th scope="col">名稱</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(p,i) in products">
+                <th scope="row">{{++i}}</th>
+                <td>{{p.productID}}</td>
+                <td>{{p.unitPrice}}</td>
+                <td>{{p.productName}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                products: [
+                    { productID: 1, unitPrice: 26.8, productName: "AAA" },
+                    { productID: 2, unitPrice: 30, productName: "BBB" },
+                    { productID: 3, unitPrice: 50.1, productName: "CCC" }
+                ]
+            }
+        },
+
+        mounted() {
+
+            let self = this;
+
+            /*不能打this 因為vue*/
+            fetch("/api/Product/News")
+                .then(response => response.json())
+                .then(d => {
+                    self.products = d;
+                }) //尾巴取名變數
+        }
+    }).mount("#app");
+</script>

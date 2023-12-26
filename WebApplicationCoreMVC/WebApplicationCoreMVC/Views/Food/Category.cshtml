@@ -1,0 +1,11 @@
+﻿<h1>食物種類</h1>
+<ul>
+    @{
+        var temp = ViewBag.Data as List<string>;
+
+        foreach (var r in temp)
+        {
+            <li>@r</li>
+        }
+    }
+</ul>
