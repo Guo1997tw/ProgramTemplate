@@ -1,0 +1,46 @@
+﻿<body>
+    <div id="EcCreate">
+        請輸入員工姓名:
+        <input v-model="createDto.employeesName">
+        <br>
+
+        請輸入顧客姓名:
+        <input v-model="createDto.CustomersName">
+        <br>
+
+        <button type="submit" @@click="createApi()">新增</button>
+    </div>
+</body>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+    Vue.createApp({
+        data() {
+            return {
+                createDto: {
+                    employeesName: "",
+                    CustomersName: "",
+                }
+            }
+        },
+        methods: {
+            createApi() {
+                let self = this;
+
+                fetch("/api/EcApi/InsertEc", {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(self.createDto)
+                })
+                    .then(r => r.json())
+                    .then(d => {
+                        if (d == true) {
+                            console.log("Success", d);
+                            alert("新增成功");
+                        }
+                        window.location.href = "/Ec/List";
+                    });
+            },
+        },
+    }).mount("#EcCreate");
+</script>

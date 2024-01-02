@@ -1,0 +1,93 @@
+﻿<body>
+    <div id="app">
+        <select v-model="insertData.employeesName">
+            <option v-for="emp in employeesList">{{emp.lastName}}</option>
+        </select>
+
+        <select v-model="insertData.customersName">
+            <option v-for="cus in customerList">{{cus.customerId}}</option>
+        </select>
+
+        <button type="submit" @@click="InsertData()">送出</button>
+        <br>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>員工姓名</td>
+                    <td>顧客姓名</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr v-for="list in listDto">
+                    <td>{{list.lastName}}</td>
+                    <td>{{list.customerId}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+@section Scripts
+{
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const emp = Vue.createApp({
+            data() {
+                return {
+                    employeesList: [],
+                    customerList: [],
+                    listDto: [],
+                    insertData: {
+                        employeesName: "",
+                        customersName: "",
+                    },
+                }
+            },
+
+            mounted() {
+                this.EmployeesNameApi();
+                this.CustomerNameApi();
+                this.ListApi();
+            },
+
+            methods: {
+                EmployeesNameApi() {
+                    let self = this;
+
+                    fetch("/api/EmployeesApi/GetEmployeesList")
+                        .then(r => r.json())
+                        .then(d => { self.employeesList = d; });
+                },
+                CustomerNameApi() {
+                    let self = this;
+
+                    fetch("/api/EmployeesApi/GetCustomerList")
+                        .then(r => r.json())
+                        .then(d => { self.customerList = d; });
+                },
+                ListApi() {
+                    let self = this;
+
+                    fetch("/api/EmployeesApi/GetAllList")
+                        .then(r => r.json())
+                        .then(d => { self.listDto = d; });
+                },
+                InsertData() {
+                    let self = this;
+
+                    fetch("/api/EmployeesApi/CreateData", {
+                        method: "POST",
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(self.insertData)
+                    }).then(r => r.json())
+                        .then(d => {
+                            console.log('Success', d);
+                            alert("新增成功");
+                        });
+                },
+            },
+        }).mount("#app");
+    </script>
+}

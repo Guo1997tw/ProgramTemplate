@@ -1,0 +1,41 @@
+﻿<body>
+    <div id="EC">
+        <table class="table" border="1">
+            <tr>
+                <td>編號</td>
+                <td>員工姓名</td>
+                <td>顧客姓名</td>
+            </tr>
+            <tr v-for="ec in ecList">
+                <td>{{ec.id}}</td>
+                <td>{{ec.employeesName}}</td>
+                <td>{{ec.customersName}}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+    Vue.createApp({
+        data() {
+            return {
+                ecList: {
+                    id: "",
+                    employeesName: "",
+                    customersName: ""
+                }
+            }
+        },
+        mounted() {
+            this.getListApi();
+        },
+        methods: {
+            getListApi() {
+                let self = this;
+
+                fetch("/api/EcApi/GetList").then(r => r.json()).then(d => { self.ecList = d; });
+            },
+        },
+    }).mount("#EC");
+</script>

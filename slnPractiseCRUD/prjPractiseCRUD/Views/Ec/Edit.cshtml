@@ -1,0 +1,54 @@
+﻿<body>
+    <div id="EcEdit">
+        請輸入員工姓名:
+        <input v-model="editDto.employeesName">
+        <br>
+
+        請輸入顧客姓名:
+        <input v-model="editDto.customersName">
+        <br>
+
+        <button type="submit" @@click="editApi()">更新</button>
+    </div>
+</body>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+    const edit = Vue.createApp({
+        data() {
+            return {
+                editDto: {
+                    employeesName: "",
+                    customersName: "",
+                },
+            }
+        },
+        mounted() {
+            this.detailApi();
+        },
+        methods: {
+            detailApi() {
+                let self = this;
+
+                fetch("/api/EcApi/GetById/21").then(r => r.json()).then(d => { self.editDto = d; });
+            },
+            editApi() {
+                let self = this;
+
+                fetch("/api/EcApi/EditEc/21", {
+                    method: "PUT",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(self.editDto)
+                })
+                    .then(r => r.json())
+                    .then(d => {
+                        if (d == true) {
+                            console.log("Success", d);
+                            alert("更新成功");
+                        }
+                        window.location.href = "/Ec/List";
+                    });
+            },
+        }
+    }).mount("#EcEdit");
+</script>
